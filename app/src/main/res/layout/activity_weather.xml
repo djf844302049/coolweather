@@ -1,0 +1,32 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/colorPrimary">
+    <!--添加一个图片控件，宽高填满，FrameLayout默认会将控件都放置在左上角，-->
+    <!--所以不会覆盖会重叠，正好成为了后面布局的背景图片-->
+    <ImageView
+        android:id="@+id/bing_pic_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+    <!--使用ScrollView允许通过滚动的方式查看屏幕以外的内容-->
+    <ScrollView
+        android:id="@+id/weather_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+        <!--由于ScrollView内部只允许存在一个直接子布局，因此这里嵌套一个垂直的布局-->
+        <!--在这里面将刚才定义的所有布局逐个引入-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/title"/>
+            <include layout="@layout/now"/>
+            <include layout="@layout/forecast"/>
+            <include layout="@layout/aqi"/>
+            <include layout="@layout/suggestion"/>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
