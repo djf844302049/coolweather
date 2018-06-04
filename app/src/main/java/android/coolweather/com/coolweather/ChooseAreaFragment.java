@@ -73,11 +73,21 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity = cityList.get( position );
                     queryCounties();
                 }else if(currentLevel == LEVEL_COUNTY){//如果点击了县，则直接跳转到天气信息界面
-                    String weatherId = countyList.get(position).getWeatherId();//获取当前城市天气id
-                    Intent intent = new Intent( getActivity(),WeatherActivity.class );
-                    intent.putExtra( "weather_id",weatherId );//传递了城市对应的天气id
-                    startActivity( intent );
-                    getActivity().finish();
+                //3在下面嵌套一个if，判断如果是在主活动中则继续执行原代码，如果本身就在天气界面则
+                    //3执行else里的。第一行的天气id因为else也要用到所以放到外面来。
+                    String weatherId = countyList.get( position ).getWeatherId();//获取当前城市天气id
+                    if(getActivity() instanceof MainActivity) {//3instanceof用来判断一个对象是否属于某个类的实例
+                        Intent intent = new Intent( getActivity(), WeatherActivity.class );
+                        intent.putExtra( "weather_id", weatherId );//传递了城市对应的天气id
+                        startActivity( intent );
+                        getActivity().finish();
+                        //3instanceof判断碎片是否在这个界面中
+                    }else if(getActivity() instanceof WeatherActivity){//3如果本身就在天气界面，则
+                        WeatherActivity activity = (WeatherActivity)getActivity();//3得到这个界面
+                        activity.drawerLayout.closeDrawers();//3关闭滑动菜单
+                        activity.swipeRefresh.setRefreshing( true );//3显示下拉刷新进度条
+                        activity.requestWeather( weatherId );//3请求新城市的天气信息
+                    }
                 }
             }
         } );
